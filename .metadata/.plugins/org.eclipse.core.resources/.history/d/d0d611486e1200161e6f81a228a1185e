@@ -1,0 +1,40 @@
+ /* Joel Adams, for CS 112 at Calvin College.
+ * Student name: Shurjo Maitra
+ * Date: 4.19.16
+ */
+#include "BST_Tester.h"
+#include <iostream>
+#include <cassert>
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+
+int main() {
+	BST_Tester bstt;
+	bstt.runTests();	
+
+	//Application
+	string a;
+	string line;
+	unsigned j;
+	cout << "...Testing BST..." << flush;
+	for (unsigned i = 1; i < 11; i++) {
+		cout << "Enter name of text file (/home/cs/112/proj/09/randomInts01.txt.)" << flush;
+		cin >> a;
+		ifstream fin(a.c_str());
+		assert (fin.is_open());
+		BST<long int> bst;
+		while (!fin.eof()) {
+			getline(fin, line);
+			int i = atoi(line.c_str());
+			try {
+				bst.insert(i);
+			}
+			catch (Exception&) {
+				j++;
+			}
+		}
+		cout << "BST Height:" << bst.getHeight() << endl;
+		cout << "No. of Exceptions: " << j << endl;
+	}
+}

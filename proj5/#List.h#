@@ -1,0 +1,245 @@
+/* List.h contains the class declarations and methods
+ * Student Name:Shurjo Maitra
+ * Date:3.8.16
+ * Joel Adams, for CS 112 at Calvin College.
+ */
+
+#include <iostream>
+#include <stdexcept>
+#include <fstream>
+#include <cassert>
+#include <cstdlib>
+
+using namespace std;
+typedef double Item;
+
+class List {
+public:
+	List();
+	int getSize() const;
+	Item getFirst() const;
+	Item getLast() const;
+	void append (const Item& it);
+	virtual ~List();
+	List(const List& original);
+	List& operator=(const List& original);
+	bool operator == (const List& original);
+	bool operator != (const List& original);
+	void readFrom(istream& in);
+	void writeTo(ostream& cout);
+private:
+	struct Node {
+		int myItem;
+		Node* myNext;
+		Node();
+		Node(int it, Node* next);
+		virtual ~Node();
+	};
+	int mySize;
+	Node* myFirst;
+	Node* myLast;
+	friend class ListTester;
+};
+
+/*Default constructor method creates a List
+ * Return: empty list with size = 0
+ */
+List::List() {
+	mySize = 0;
+	myFirst = NULL;
+	myLast = NULL;
+}
+
+/*Node Default constructor method creates a List
+ * Return: empty list with size = 0 with linked nodes
+ */
+List::Node::Node() {
+	myItem = 0;
+	myNext = NULL;
+}
+/*Node Explicit constructor method creates a List
+ * Return: empty list with size = 0 with linked nodes explicitly
+ */
+List::Node::Node(int it, Node* next) {
+	myItem = it;
+	myNext = next;
+}
+
+/*getSize constructor for list class
+ * Return: size of list
+ */
+int List::getSize() const {
+	return mySize;
+}
+
+/*getFirst constructor for list class
+ * Return: gets the first value in the list and returns it into myItem
+ */
+Item List::getFirst() const {
+	if (mySize < 0 || myFirst == NULL) {
+		throw underflow_error("Size of List is too small");
+	}
+	else {
+		return myFirst -> myItem;
+	}
+}
+/*getLast constructor for list class
+ * Return: gets the last value in the list and returns it into myItem
+ */
+Item List::getLast() const {
+	if (mySize < 0 || myLast == NULL) {
+		throw underflow_error("Size of List can't be negative");
+	}
+	else {
+		return myLast -> myItem;
+	}
+}
+
+/*Append operator for list class
+ * Param: nodePtr
+ * Return: list with item added at the end
+ */
+void List::append(const Item& it) {
+	Node * nodePtr = new Node(it, NULL);
+	if (mySize == 0) {
+		myFirst = nodePtr;
+	}
+	else {
+		myLast -> myNext = nodePtr;
+	}
+	myLast = nodePtr;
+	mySize ++;
+}
+
+/*Destructor for list class
+ * Return: empty list
+ */
+List::~List() {
+   delete myFirst;          // delete first node, invoking ~Node() (does nothing if myFirst == NULL)
+   myFirst = myLast = NULL; // clear myFirst and myLast (optional)
+   mySize = 0;              // clear mySize (optional)
+}
+
+/*Node destructor for list class
+ * Return: empty node
+ */
+List::Node::~Node() {
+   delete myNext;  // delete the next node, invoking ~Node() in it
+                   // (does nothing if myNext == NULL)
+   myNext = NULL;  // clear myNext (optional)
+   myItem = 0;     // clear myItem (optional)
+}
+
+/*Copy constructor for list class
+ * Return: list copied and stored in nodes
+ */
+List::List(const List& original) {
+   myFirst = myLast = NULL;          //  set pointers
+   mySize = 0;                       //   and size to 'empty' values
+   if (original.getSize() > 0) {     //  if there are nodes to copy:
+      Node* oPtr = original.myFirst; //  start at the first node
+      while (oPtr != NULL) {         //  while there are more nodes:
+         append(oPtr->myItem);       //   append the item in that node
+         oPtr = oPtr->myNext;        //   advance to next node
+      }
+   }
+}
+
+/* Assignment operator for list class
+ * checks if list is equal to another list
+ * Param: list pointers
+ */
+List& List::operator = (const List& original) {
+	if (this != &original) {
+		delete myFirst;
+		myFirst = myLast = NULL;
+		mySize = 0;
+		if (original.getSize() > 0) {
+			Node* oPtr = original.myFirst;
+			while (oPtr != NULL) {
+				append(oPtr -> myItem);
+				oPtr = oPtr -> myNext;
+			}
+		}
+	}
+	return *this;
+}
+
+/*Equality operator for list class
+ * checks if the first and second list is equal
+ * Param: list1 and list2, list3(empty)
+ * Return: true or false
+ */
+bool List::operator == (const List& original) {
+	if (original.getSize() != mySize) {
+		return false;
+	}
+	else {
+		Node * nodePtr1 = myFirst;
+		Node * nodePtr2 = original.myFirst;
+		for ( int i = 0; i < mySize; i++) {
+			if (nodePtr1 -> myItem != nodePtr2 -> myItem) {
+				return false;
+			}
+			nodePtr1 = nodePtr1 -> myNext;
+			nodePtr2 = nodePtr2 -> myNext;
+		}
+	}
+	return true;
+}
+
+/*Inequality operator for list class
+ * checks if the first and second list are unequal
+ * Param: list1 and list2, list3(empty)
+ * Return: true or false
+ */
+ bool List::operator != (const List& original) {
+	 if(this == &original) {
+		 return false;
+	 }
+	else if (this -> mySize != original.mySize) {
+		return true;
+	}
+	 for (int i = 0; i < mySize; i++) {
+		 Node* oPtr = original.myFirst;
+		 if (this -> myFirst != oPtr) {
+			 return true;
+		 }
+	 }
+	 return false;
+ }
+
+ /*readFrom() function for list class
+  * param: an istream to read from
+  * Postcondition: the string is read to the list
+  */
+ void List::readFrom(istream& in) {
+	 if (mySize != 0) {
+		 delete myFirst;
+		 myFirst = myLast = NULL;
+		 mySize = 0;
+	 }
+	 string line;
+	 getline(in, line);
+	 string storage;
+	 for (unsigned i = 0; i < line.length(); i++) {
+		 if (line[i] != ' ') {
+			 storage += line[i];
+		 }
+		 else if (line[i] == ' ' and line.length() -1 != i) {
+			 Item it = atof(storage.c_str());
+			 append(it);
+			 storage.clear();
+		 }
+		 if (i == line.length() -1) {
+			 Item it = atof(storage.c_str());
+			 append(it);
+			 storage.clear();
+		 }
+	 }
+ }
+ /*writeTo() function for list class
+  * param: an istream to write to
+  * Postcondition: the string is written to the list
+  */
+void List::writeTo(ostream& cout) const {

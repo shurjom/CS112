@@ -1,0 +1,34 @@
+11:43:04 **** Incremental Build of configuration Debug for project lab4 ****
+make all 
+Building file: ../Matrix.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Matrix.d" -MT"Matrix.d" -o "Matrix.o" "../Matrix.cpp"
+Finished building: ../Matrix.cpp
+ 
+Building file: ../MatrixTester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"MatrixTester.d" -MT"MatrixTester.d" -o "MatrixTester.o" "../MatrixTester.cpp"
+../MatrixTester.cpp: In member function 'void MatrixTester::testSubscripts()':
+../MatrixTester.cpp:220:10: warning: unused variable 'value' [-Wunused-variable]
+   double value = m0[0][0];
+          ^
+Finished building: ../MatrixTester.cpp
+ 
+Building file: ../VecTester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"VecTester.d" -MT"VecTester.d" -o "VecTester.o" "../VecTester.cpp"
+Finished building: ../VecTester.cpp
+ 
+Building file: ../tester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"tester.d" -MT"tester.d" -o "tester.o" "../tester.cpp"
+Finished building: ../tester.cpp
+ 
+Building target: lab4
+Invoking: GCC C++ Linker
+g++  -o "lab4"  ./Matrix.o ./MatrixTester.o ./VecTester.o ./tester.o   
+Finished building target: lab4
+ 
+
+11:43:05 Build Finished (took 711ms)
+

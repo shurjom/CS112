@@ -1,0 +1,44 @@
+11:43:06 **** Build of configuration Debug for project proj1 ****
+make all 
+Building file: ../PlayList.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"PlayList.d" -MT"PlayList.d" -o "PlayList.o" "../PlayList.cpp"
+../PlayList.cpp: In member function 'std::vector<Song> PlayList::searchByYear(int) const':
+../PlayList.cpp:68:32: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   if ( mySongs[i].getYear() == year ) {
+                                ^
+Finished building: ../PlayList.cpp
+ 
+Building file: ../PlayListManager.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"PlayListManager.d" -MT"PlayListManager.d" -o "PlayListManager.o" "../PlayListManager.cpp"
+Finished building: ../PlayListManager.cpp
+ 
+Building file: ../PlayListTester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"PlayListTester.d" -MT"PlayListTester.d" -o "PlayListTester.o" "../PlayListTester.cpp"
+Finished building: ../PlayListTester.cpp
+ 
+Building file: ../Song.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Song.d" -MT"Song.d" -o "Song.o" "../Song.cpp"
+Finished building: ../Song.cpp
+ 
+Building file: ../SongTester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"SongTester.d" -MT"SongTester.d" -o "SongTester.o" "../SongTester.cpp"
+Finished building: ../SongTester.cpp
+ 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: proj1
+Invoking: GCC C++ Linker
+g++  -o "proj1"  ./PlayList.o ./PlayListManager.o ./PlayListTester.o ./Song.o ./SongTester.o ./main.o   
+Finished building target: proj1
+ 
+
+11:43:07 Build Finished (took 959ms)
+

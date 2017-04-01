@@ -1,0 +1,25 @@
+11:43:03 **** Build of configuration Debug for project lab2 ****
+make all 
+Building file: ../array.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"array.d" -MT"array.d" -o "array.o" "../array.cpp"
+Finished building: ../array.cpp
+ 
+Building file: ../part1.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"part1.d" -MT"part1.d" -o "part1.o" "../part1.cpp"
+Finished building: ../part1.cpp
+ 
+Building file: ../part2.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"part2.d" -MT"part2.d" -o "part2.o" "../part2.cpp"
+Finished building: ../part2.cpp
+ 
+Building target: lab2
+Invoking: GCC C++ Linker
+g++  -o "lab2"  ./array.o ./part1.o ./part2.o   
+Finished building target: lab2
+ 
+
+11:43:03 Build Finished (took 308ms)
+

@@ -1,0 +1,258 @@
+Script started on Tue 10 May 2016 02:41:32 PM EDT
+sm47@thompson:~/workspace/cs112/proj10$ ls
+Image000001.png  Image000101.png  Image conversion.xls	main.o
+Image000002.png  Image000169.png  ImageInverter.cpp	Makefile
+Image000061.png  Image000254.png  ImageInverter.h	pics
+Image000062.png  Image000510.png  ImageInverter.o	typescript
+Image000072.png  Image000980.png  main			Untitled 1.odt
+Image000084.png  Image001022.png  main.cpp
+sm47@thompson:~/workspace/cs112/proj10$ cat ImageC Inverter.cpp ImageInverter.h ma in.cpp
+/* ImageInverter.cpp defines the ImageInverter methods
+ *  that are declared in ImageInverter.h.
+ *
+ * Joel Adams, Fall 2015, for CS 112 at Calvin College.
+ * Student name: Shurjo Maitra
+ * Date: 5.9.16
+ */
+
+
+#include "ImageInverter.h"
+
+/* explicit constructor
+ * @param fileName, a string.
+ * @param width, an int.
+ * @param height, an int.
+ * Precondition: fileName contains the name of a valid image file
+ *               && width contains the number of columns in that image
+ *               && height contains the number of rows in the image.
+ * Postcondition: myCanvas0 contains the image from fileName
+ *               && myWidth == width
+ *               && myHeight == height
+ *               && myFileName == fileName
+ */
+
+ImageInverter::ImageInverter(const string& fileName, int width, int height) :
+		myCanvas0(0, 0, width, height, fileName), myWidth(width), myHeight(
+				height), myFileName(fileName) {
+	myCanvas0.start();
+	myCanvas0.drawImage(fileName, 0, 0, width, height);
+	sleep(1);
+}
+
+/* method to invert an image
+ * Precondition: myCanvas0 contains a valid image.
+ * Postcondition: canvas1 is displaying the inverse of the image in myCanvas0.
+ */
+
+void ImageInverter::invertImage() {
+
+	Canvas canvas1(-1, -1, myWidth, myHeight,
+			myFileName + " Inverted, Chunk-Size 1");
+	canvas1.start();
+
+	// launch additional threads
+#pragma omp parallel
+	{
+		ColorInt pixelColor;
+		// how many workers do we have?
+		unsigned numThreads = omp_get_num_threads();
+		// which one am I?
+		unsigned id = omp_get_thread_num();
+
+		// loop through the image rows
+		for (int row = id; row < myHeight; row += numThreads) {
+			// slow the processing to simulate a very large image
+			myCanvas0.sleep();
+			// loop through the image columns
+			for (int col = 0; col < myWidth; col++) {
+				// read the pixel at canvas1[row][col]
+				pixelColor = myCanvas0.getPixel(row, col);
+				// compute its inverse
+				int invertedR = 255 - pixelColor.R;
+				int invertedG = 255 - pixelColor.G;
+				int invertedB = 255 - pixelColor.B;
+				// draw the inverse at the same spot in canvas2
+				canvas1.drawPixel(row, col,
+						ColorInt(invertedR, invertedG, invertedB));
+			}
+		}
+	}
+	canvas1.wait();
+}
+
+/* method to replace colors in an image
+ * Precondition: myCanvas0 contains a valid image.
+ * Postcondition: canvas1 is displaying the colors replaced of the original image in myCanvas0.
+ */
+void ImageInverter::colorReplaceImage() {
+	// record starting time
+	double startTime = omp_get_wtime();
+
+	Canvas canvas2(-1, -1, myWidth, myHeight,
+			myFileName + " colorReplaced, Chunk-Size 1");
+	canvas2.start();
+
+	ColorInt pixelColor;
+
+	// launch additional threads
+#pragma omp parallel
+	{
+		ColorInt pixelColor;
+		// how many workers do we have?
+		unsigned numThreads = omp_get_num_threads();
+		// which one am I?
+		unsigned id = omp_get_thread_num();
+
+		// loop through the image rows
+		for (int row = id; row < myHeight; row += numThreads) {
+			// slow the processing to simulate a very large image
+			myCanvas0.sleep();
+			// loop through the image columns
+			for (int col = 0; col < myWidth; col++) {
+				// read the pixel at canvas1[row][col]
+				pixelColor = myCanvas0.getPixel(row, col);
+				// replace the color
+				int replacedR = pixelColor.B;
+				int replacedG = pixelColor.R;
+				int replacedB = pixelColor.G;
+				// replace color at the same spot in canvas2
+				canvas2.drawPixel(row, col,
+						ColorInt(replacedR, replacedG, replacedB));
+			}
+		}
+	}
+
+// compute and display the time difference
+double time = omp_get_wtime() - startTime;
+cout << "\n\nImage color replacement took " << time << " seconds.\n" << endl;
+
+//save converted image
+canvas2.takeScreenShot();
+canvas2.wait();
+}
+
+/* method to lighten an image
+ * Precondition: myCanvas0 contains a valid image.
+ * Postcondition: canvas1 is displaying the lightened version of the image in myCanvas0.
+ */
+void ImageInverter::lightenImage() {
+	// record starting time
+	double startTime = omp_get_wtime();
+
+	Canvas canvas3(-1, -1, myWidth, myHeight,
+			myFileName + " colorReplaced, Chunk-Size 1");
+	canvas3.start();
+
+	ColorInt pixelColor;
+
+	// launch additional threads
+#pragma omp parallel
+	{
+		ColorInt pixelColor;
+		// how many workers do we have?
+		unsigned numThreads = omp_get_num_threads();
+		// which one am I?
+		unsigned id = omp_get_thread_num();
+
+		// loop through the image rows
+		for (int row = id; row < myHeight; row += numThreads) {
+			// slow the processing to simulate a very large image
+			myCanvas0.sleep();
+			// loop through the image columns
+			for (int col = 0; col < myWidth; col++) {
+				// read the pixel at canvas1[row][col]
+				pixelColor = myCanvas0.getPixel(row, col);
+				// lighten the color
+				float correctionFactor = 0.5f;
+				int lightenedR = (255 - pixelColor.R) * correctionFactor + pixelColor.R;
+				int lightenedG = (255 - pixelColor.G)* correctionFactor + pixelColor.G;
+				int lightenedB = (255 - pixelColor.B)* correctionFactor + pixelColor.B;
+				// lighten color at the same spot in canvas2
+				canvas3.drawPixel(row, col,
+						ColorInt(lightenedR, lightenedG, lightenedB));
+			}
+		}
+	}
+
+// compute and display the time difference
+double time = omp_get_wtime() - startTime;
+cout << "\n\nImage lightening took " << time << " seconds.\n" << endl;
+
+//save converted image
+canvas3.takeScreenShot();
+canvas3.wait();
+}
+/* ImageInverter.h declares the ImageInverter class,
+ *  which uses TSGL to invert a photographic image.
+ *
+ * Joel Adams, Fall 2015, for CS 112 at Calvin College.
+ *
+ * Note: We use int instead of unsigned throughout
+ *       because of a bug in GCC/OpenMP.
+ * Student name: Shurjo Maitra
+ * Date: 5.9.16
+ */
+
+#ifndef IMAGEINVERTER_H_
+#define IMAGEINVERTER_H_
+
+#include <tsgl.h>      // Canvas, ColorInt, etc.
+#include <omp.h>       // OpenMP functions
+#include <unistd.h>    // sleep()
+
+using namespace tsgl;
+using namespace std;
+
+class ImageInverter {
+public:
+  ImageInverter(const string& fileName, int width, int height);
+  void invertImage();
+  void wait()          { myCanvas0.wait(); }
+  void colorReplaceImage();
+  void lightenImage();
+
+private:
+  Canvas   myCanvas0;
+  int      myWidth;
+  int      myHeight;
+  string   myFileName;
+};
+
+#endif /* IMAGEINVERTER_H_ */
+/*
+ * main.cpp is a driver for an ImageInverter program
+ *  using OpenMP to parallelize the image processing
+ *  and TSGL to view the processing in near real time.
+ *
+ * Author: Joel Adams, for CS 112 at Calvin College.
+ * Date: March 2015.
+ * Student name: Shurjo Maitra
+ * Date: 5.9.16
+ */
+
+#include "ImageInverter.h"
+
+int main() {
+	omp_set_num_threads(16);
+   ImageInverter inverter("pics/beads.jpg", 1024, 1024);
+//   inverter.invertImage();
+   inverter.colorReplaceImage();
+   inverter.lightenImage();
+   inverter.wait();
+
+}
+sm47@thompson:~/workspace/cs112/proj10$ make all\
+> > 
+make: Nothing to be done for `all'.
+sm47@thompson:~/workspace/cs112/proj10$ ./Debug     main
+
+
+Image color replacement took 1.08605 seconds.
+
+
+
+Image lightening took 1.08694 seconds.
+
+sm47@thompson:~/workspace/cs112/proj10$ exit
+
+Script done on Tue 10 May 2016 02:42:40 PM EDT

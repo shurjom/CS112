@@ -1,0 +1,25 @@
+11:43:04 **** Build of configuration Debug for project lab3 ****
+make all 
+Building file: ../Vec.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Vec.d" -MT"Vec.d" -o "Vec.o" "../Vec.cpp"
+Finished building: ../Vec.cpp
+ 
+Building file: ../VecTester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"VecTester.d" -MT"VecTester.d" -o "VecTester.o" "../VecTester.cpp"
+Finished building: ../VecTester.cpp
+ 
+Building file: ../tester.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"tester.d" -MT"tester.d" -o "tester.o" "../tester.cpp"
+Finished building: ../tester.cpp
+ 
+Building target: lab3
+Invoking: GCC C++ Linker
+g++  -o "lab3"  ./Vec.o ./VecTester.o ./tester.o   
+Finished building target: lab3
+ 
+
+11:43:04 Build Finished (took 458ms)
+

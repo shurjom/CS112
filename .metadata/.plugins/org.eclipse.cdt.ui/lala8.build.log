@@ -1,0 +1,6 @@
+23:27:12 **** Incremental Build of configuration Debug for project lala8 ****
+make all 
+make: Nothing to be done for `all'.
+
+23:27:12 Build Finished (took 59ms)
+

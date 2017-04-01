@@ -1,0 +1,6 @@
+11:52:16 **** Incremental Build of configuration Debug for project lab2_hex ****
+make all 
+make: Nothing to be done for `all'.
+
+11:52:16 Build Finished (took 60ms)
+
